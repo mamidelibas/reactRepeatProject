@@ -1,40 +1,113 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## 1- Yeni bir React & NextJS uygulaması oluşturmak
 
-## Getting Started
+Yeni bir proje oluşturmak için:
 
-First, run the development server:
+- "npx create next-app" komutu terminal'de çalıştırılır
+- Tailwind haricindeki bütün seçenekler "No" diyerek geçilebilir (tercihe bağlı)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 2- NextJS Template'inin temizlenmesi
+
+Silinecek olan klasör/dosya ve satırlar şu şekildedir:
+
+- pages > api klasörü
+- styles > globals.css içerisinde @tailwind şeklinde başlayan satırlar haricindeki diğer satırlar silinir
+- pages > index.js altındaki bütün import'lar silinir (export default üzerindeki satırlar silinir) ve return() içerisi temizlenir. return() içerisinde boş bir etiket açıp kapatılabilir.
+  \*JSX gösteriminde return içerisinde bütün HTML elemanlarını kapsayan bir etiket olmak zorundadır. Ör:
+
+```
+return(
+    <h2>Selam</h2>
+    <span>selam</span>
+)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+şeklindeki bir gösterim JSX yapısına uygun olmadığı için hata verecektir. Bunun yerine bütün elemanları kapsayan bir parent etiket olmalıdır:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```
+return(
+    <>
+    <h2>Selam</h2>
+    <span>selam</span>
+    </>
+)
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## 3- Projenin ayağa kaldırılması
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Projemizi local sunucuda ayağı kaldırmak için
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```
+npm run dev
+```
 
-## Learn More
+komutu terminalde çalıştırılır
 
-To learn more about Next.js, take a look at the following resources:
+## 4- JSX gösterimi
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- inline css yazmak için HTML'de olduğu gibi style="" yapısını kullanmak yerine style={{ }} yapısını kullanmamız gerekmektedir.
+  -Dikkat edilmesi gereken diğer husus ise CSS propertylerini yazarken tire işareti kullanmamaktadır. Bunun yerine camelCase gösterim kullanılmalıdır.
+- Ayrıca CSS property'lerini ayırmak için ";" yerine "," kullanılmalıdır
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```
+style={{
+    background-color: "#252525";
+    color: "red"
+}}
 
-## Deploy on Vercel
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+yerine aşağıdaki yapı kullanılmalıdır:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+style={{
+    backgroundColor: "#252525",
+    color: "red"
+}}
+```
+
+- HTML etiketlerine class attribute'u tanımlanırken class="heading" yapısı yerine className="heading" yapısı kullanılmalıdır. Kısacası class attribute'u yerine JSX yapısında className attribute'u kullanılır.
+
+- Bir attribute'a değişken bir değer atamak istiyorsak attribute={degiskenAdi} şeklinde tanımlama yapabiliriz:
+
+```
+    <img src={imageUrl} alt="nextjs" />
+```
+
+- DOM kısmında bir değişken çağırmak için yine süslü parantez kullanılabilir: {degiskenAdi}
+
+- return içerisinde (DOM kısmında) Javascript yazılmaz (İstisnalar alt maddede belirtilmiştir). Javascript kodlarını return() yapısının üzerinde yazarız:
+
+```
+export default function Home() {
+
+    JAVASCRIPT KODLARI BURADA YAZILIR
+
+    return(
+        <>
+            HTML KODLARI BURADA YAZILIR
+        </>
+    )
+}
+```
+
+- JSX yapısında (DOM içerisinde) yorum satırı HTML'de olduğu gibi <!-- COMMENT --> şeklinde değil aşağıdaki gibi açılır. Javascript yazılan yani return() öncesindeki kısımda yorum satırları Javascript'teki gibidir.
+
+```
+{
+    /*
+        YORUM SATIRI
+    */
+}
+```
+
+- Event'leri kontrol etmek için camelCase olmak kaydıyla attribute olarak elemana tanımlayabiliriz. Bu event'in attribute'una değer olarak bir anonim - anonymous fonksiyon girilir ve Javascript yazılan kısımda bir fonksiyon oluşturup bu fonksiyon çağrılabilir.
+
+```
+<h2
+onClick={() => {
+    alert("Tıklandı")
+}}>Tıklanabilir eleman</h2>
+
+
+<h2 onClick={clickHandler}>Tıklanabilir eleman</h2>
+```
